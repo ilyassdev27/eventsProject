@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% comment %}
+  Page générique pour tous les formulaires du site (héritage à deux niveaux) :
+  base.html → formulaire.html → login.html, creer_compte.html...
+  Les vues « événement » et « catégorie » l'utilisent directement avec
+  les variables titre_page, texte_bouton et url_retour.
+{% endcomment %}
+
+{% block title %}{{ titre_page }}{% endblock %}
+
+{% block content %}
+<section class="panneau panneau--formulaire">
+  <h1>{% block titre_formulaire %}{{ titre_page }}{% endblock %}</h1>
+  {% block intro %}{% endblock %}
+
+  {# novalidate : c'est Django (forms.py) qui valide les données et affiche les erreurs. #}
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% include "partials/_formulaire.html" %}
+    {% block champs_supplementaires %}{% endblock %}
+
+    <div class="actions">
+      <button type="submit" class="bouton">{% block texte_bouton %}{{ texte_bouton|default:"Enregistrer" }}{% endblock %}</button>
+      {% if url_retour %}
+        <a href="{{ url_retour }}" class="bouton bouton--secondaire">Annuler</a>
+      {% endif %}
+    </div>
+  </form>
+
+  {% block apres_formulaire %}{% endblock %}
+</section>
+{% endblock %}

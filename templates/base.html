@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Accueil{% endblock %} · TechEvents</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  {% include "partials/_navbar.html" %}
+
+  <main class="conteneur">
+    {% include "partials/_messages.html" %}
+
+    {# Chaque page enfant remplit ce bloc avec son propre contenu. #}
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="pied-de-page">
+    <div class="conteneur">
+      TechEvents · Gestionnaire d'événements et de formations tech · Mini-projet Django
+    </div>
+  </footer>
+</body>
+</html>

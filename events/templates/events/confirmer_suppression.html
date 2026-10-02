@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Supprimer {{ evenement.titre }}{% endblock %}
+
+{% block content %}
+<section class="panneau panneau--formulaire">
+  <h1>Supprimer l'événement</h1>
+  <p>Voulez-vous vraiment supprimer « <strong>{{ evenement.titre }}</strong> » ? Cette action est définitive.</p>
+
+  {% with total=evenement.nombre_inscrits %}
+    {% if total %}
+      <div class="alerte alerte--warning">
+        {{ total }} inscription{{ total|pluralize }} {{ total|pluralize:"sera,seront" }} également supprimée{{ total|pluralize }}.
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <form method="post">
+    {% csrf_token %}
+    <div class="actions">
+      <button type="submit" class="bouton bouton--danger">Oui, supprimer</button>
+      <a href="{{ evenement.get_absolute_url }}" class="bouton bouton--secondaire">Annuler</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

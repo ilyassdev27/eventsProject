@@ -1,0 +1,13 @@
+{# Affiche UN champ de formulaire : label, saisie, aide et erreurs. Variable attendue : champ #}
+<div class="champ{% if champ.errors %} champ--erreur{% endif %}">
+  <label for="{{ champ.id_for_label }}">
+    {{ champ.label }}{% if champ.field.required %} <span class="champ__requis">*</span>{% endif %}
+  </label>
+  {{ champ }}
+  {% if champ.help_text %}
+    <div class="champ__aide">{{ champ.help_text|safe }}</div>
+  {% endif %}
+  {% for erreur in champ.errors %}
+    <p class="champ__message-erreur">{{ erreur }}</p>
+  {% endfor %}
+</div>

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Accès refusé{% endblock %}
+
+{% block content %}
+<section class="page-erreur">
+  <p class="page-erreur__code">403</p>
+  <h1>Accès refusé</h1>
+  <p>Vous n'avez pas la permission d'effectuer cette action.<br>
+     Par exemple, seul l'organisateur d'un événement peut le modifier ou le supprimer.</p>
+  <a href="{% url 'events:liste' %}" class="bouton">Retour aux événements</a>
+</section>
+{% endblock %}

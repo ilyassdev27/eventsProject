@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Page introuvable{% endblock %}
+
+{% block content %}
+<section class="page-erreur">
+  <p class="page-erreur__code">404</p>
+  <h1>Page introuvable</h1>
+  <p>La page demandée n'existe pas ou l'événement a été supprimé.</p>
+  <a href="{% url 'events:liste' %}" class="bouton">Retour aux événements</a>
+</section>
+{% endblock %}

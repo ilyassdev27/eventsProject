@@ -1,0 +1,8 @@
+{# Messages de confirmation ou d'erreur envoyés par les vues (django.contrib.messages). #}
+{% if messages %}
+  <div class="messages">
+    {% for message in messages %}
+      <div class="alerte alerte--{{ message.tags }}" role="status">{{ message }}</div>
+    {% endfor %}
+  </div>
+{% endif %}

@@ -1,0 +1,21 @@
+{% extends "formulaire.html" %}
+{# Héritage à deux niveaux : base.html → formulaire.html → login.html #}
+
+{% block title %}Connexion{% endblock %}
+
+{% block titre_formulaire %}Connexion{% endblock %}
+
+{% block intro %}
+  <p class="sous-titre">Connectez-vous pour créer des événements et vous y inscrire.</p>
+{% endblock %}
+
+{% block champs_supplementaires %}
+  {# Page à afficher après la connexion (ex. : ?next=/evenements/nouveau/) #}
+  <input type="hidden" name="next" value="{{ next }}">
+{% endblock %}
+
+{% block texte_bouton %}Se connecter{% endblock %}
+
+{% block apres_formulaire %}
+  <p class="note">Pas encore de compte ? <a href="{% url 'accounts:signup' %}">Créer un compte</a></p>
+{% endblock %}

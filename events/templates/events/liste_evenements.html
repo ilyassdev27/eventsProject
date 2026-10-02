@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Événements{% endblock %}
+
+{% block content %}
+<section class="entete-page">
+  <div>
+    <h1>Événements et formations tech</h1>
+    <p class="sous-titre">Conférences, ateliers pratiques et certifications pour votre veille technologique.</p>
+  </div>
+  {% if user.is_authenticated %}
+    <a href="{% url 'events:creer' %}" class="bouton">+ Nouvel événement</a>
+  {% endif %}
+</section>
+
+{# Filtres : les liens modifient seulement le paramètre concerné dans l'URL ({% querystring %}). #}
+<nav class="onglets" aria-label="Filtrer par statut">
+  {% for valeur, libelle in statuts %}
+    <a href="{% querystring statut=valeur %}" class="onglet{% if valeur == statut_actif %} onglet--actif{% endif %}">{{ libelle }}</a>
+  {% endfor %}
+</nav>
+
+<div class="filtres-categories" aria-label="Filtrer par catégorie">
+  <a href="{% querystring categorie=None %}" class="puce{% if not categorie_active %} puce--active{% endif %}">Toutes les catégories</a>
+  {% for categorie in categories %}
+    <a href="{% querystring categorie=categorie.pk %}" class="puce{% if categorie == categorie_active %} puce--active{% endif %}">
+      {{ categorie.nom }} <span class="puce__compteur">{{ categorie.nb_evenements }}</span>
+    </a>
+  {% endfor %}
+</div>
+
+{% if evenements %}
+  <p class="resultat">{{ evenements|length }} événement{{ evenements|length|pluralize }}</p>
+  <div class="grille">
+    {% for evenement in evenements %}
+      {% include "events/_carte_evenement.html" %}
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="vide">
+    <p>Aucun événement ne correspond à ces critères.</p>
+    <a href="{% url 'events:liste' %}">Afficher tous les événements</a>
+  </div>
+{% endif %}
+{% endblock %}

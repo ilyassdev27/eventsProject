@@ -1,0 +1,16 @@
+{% extends "formulaire.html" %}
+{# Héritage à deux niveaux : base.html → formulaire.html → creer_compte.html #}
+
+{% block title %}Créer un compte{% endblock %}
+
+{% block titre_formulaire %}Créer un compte{% endblock %}
+
+{% block intro %}
+  <p class="sous-titre">Inscrivez-vous pour suivre les événements et organiser les vôtres.</p>
+{% endblock %}
+
+{% block texte_bouton %}Créer mon compte{% endblock %}
+
+{% block apres_formulaire %}
+  <p class="note">Vous avez déjà un compte ? <a href="{% url 'accounts:login' %}">Se connecter</a></p>
+{% endblock %}

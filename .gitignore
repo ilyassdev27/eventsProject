@@ -1,0 +1,26 @@
+# Environnement virtuel
+venv/
+.venv/
+env/
+
+# Fichiers Python compilés
+__pycache__/
+*.py[cod]
+
+# Base de données locale (chacun crée la sienne avec « migrate »)
+db.sqlite3
+db.sqlite3-journal
+
+# Secrets et configuration locale
+.env
+
+# Fichiers générés par Django
+staticfiles/
+media/
+
+# Éditeurs et systèmes
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log

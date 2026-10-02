@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Mon tableau de bord{% endblock %}
+
+{% block content %}
+<section class="entete-page">
+  <div>
+    <h1>Mon tableau de bord</h1>
+    <p class="sous-titre">Suivez vos inscriptions et les événements que vous organisez.</p>
+  </div>
+  <a href="{% url 'events:creer' %}" class="bouton">+ Nouvel événement</a>
+</section>
+
+<div class="statistiques">
+  <div class="stat">
+    <span class="stat__valeur">{{ prochains|length }}</span>
+    <span class="stat__libelle">Inscription{{ prochains|length|pluralize }} à venir</span>
+  </div>
+  <div class="stat">
+    <span class="stat__valeur">{{ historique|length }}</span>
+    <span class="stat__libelle">Participation{{ historique|length|pluralize }} passée{{ historique|length|pluralize }}</span>
+  </div>
+  <div class="stat">
+    <span class="stat__valeur">{{ organises|length }}</span>
+    <span class="stat__libelle">Événement{{ organises|length|pluralize }} organisé{{ organises|length|pluralize }}</span>
+  </div>
+</div>
+
+<h2 class="titre-section">Mes prochains événements</h2>
+{% if prochains %}
+  <div class="grille">
+    {% for evenement in prochains %}
+      {% include "events/_carte_evenement.html" %}
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="vide">
+    <p>Vous n'êtes inscrit à aucun événement à venir.</p>
+    <a href="{% url 'events:liste' %}?statut=a_venir">Parcourir les événements à venir</a>
+  </div>
+{% endif %}
+
+<h2 class="titre-section">Historique de participation</h2>
+{% if historique %}
+  <div class="tableau-conteneur">
+    <table class="tableau">
+      <thead>
+        <tr><th>Événement</th><th>Catégorie</th><th>Date</th></tr>
+      </thead>
+      <tbody>
+        {% for evenement in historique %}
+          <tr>
+            <td><a href="{{ evenement.get_absolute_url }}">{{ evenement.titre }}</a></td>
+            <td>{{ evenement.categorie.nom }}</td>
+            <td>{{ evenement.date|date:"j F Y" }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <div class="vide"><p>Aucune participation passée pour le moment.</p></div>
+{% endif %}
+
+<h2 class="titre-section">Événements que j'organise</h2>
+{% if organises %}
+  <div class="tableau-conteneur">
+    <table class="tableau">
+      <thead>
+        <tr><th>Événement</th><th>Date</th><th>Statut</th><th>Inscrits</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for evenement in organises %}
+          <tr>
+            <td><a href="{{ evenement.get_absolute_url }}">{{ evenement.titre }}</a></td>
+            <td>{{ evenement.date|date:"j F Y · H\hi" }}</td>
+            <td><div class="badges">{% include "events/_badges_statut.html" %}</div></td>
+            <td>{{ evenement.nombre_inscrits }} / {{ evenement.capacite }}</td>
+            <td class="tableau__action"><a href="{% url 'events:modifier' evenement.pk %}">Modifier</a></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% else %}
+  <div class="vide">
+    <p>Vous n'organisez aucun événement.</p>
+    <a href="{% url 'events:creer' %}">Créer mon premier événement</a>
+  </div>
+{% endif %}
+{% endblock %}

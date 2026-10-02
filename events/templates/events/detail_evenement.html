@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}{{ evenement.titre }}{% endblock %}
+
+{% block content %}
+<a href="{% url 'events:liste' %}" class="lien-retour">← Tous les événements</a>
+
+<div class="detail">
+  <article class="panneau detail__principal">
+    <div class="badges">
+      <a href="{% url 'events:liste' %}?categorie={{ evenement.categorie.pk }}" class="badge badge--categorie">{{ evenement.categorie.nom }}</a>
+      {% include "events/_badges_statut.html" %}
+    </div>
+
+    <h1>{{ evenement.titre }}</h1>
+    <p class="carte__type">
+      {{ evenement.get_type_evenement_display }} · organisé par
+      {{ evenement.organisateur.get_full_name|default:evenement.organisateur.username }}
+    </p>
+
+    <h2 class="titre-section">Description</h2>
+    {% if evenement.description %}
+      <div class="description">{{ evenement.description|linebreaks }}</div>
+    {% else %}
+      <p class="texte-discret">Aucune description pour cet événement.</p>
+    {% endif %}
+
+    {# Liste visible uniquement par l'organisateur (participants vaut None pour les autres). #}
+    {% if participants is not None %}
+      <h2 class="titre-section">Participants inscrits ({{ evenement.nombre_inscrits }})</h2>
+      {% if participants %}
+        <ul class="liste-participants">
+          {% for inscription in participants %}
+            <li>
+              {{ inscription.utilisateur.get_full_name|default:inscription.utilisateur.username }}
+              <span class="texte-discret">inscrit le {{ inscription.date_inscription|date:"j F Y" }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="texte-discret">Aucun inscrit pour le moment.</p>
+      {% endif %}
+    {% endif %}
+  </article>
+
+  <aside class="panneau detail__infos">
+    <dl class="infos">
+      <div><dt>Date</dt><dd>{{ evenement.date|date:"l j F Y" }}</dd></div>
+      <div><dt>Heure</dt><dd>{{ evenement.date|date:"H\hi" }}</dd></div>
+      <div><dt>Lieu</dt><dd>{{ evenement.lieu }}</dd></div>
+      <div><dt>Inscrits</dt><dd>{{ evenement.nombre_inscrits }} / {{ evenement.capacite }}</dd></div>
+    </dl>
+    <div class="jauge" title="Taux de remplissage">
+      <div class="jauge__remplissage" style="width: {% widthratio evenement.nombre_inscrits evenement.capacite 100 %}%"></div>
+    </div>
+
+    <div class="detail__action">
+      {% if not user.is_authenticated %}
+        <a href="{% url 'accounts:login' %}?next={{ request.path|urlencode }}" class="bouton bouton--large">Se connecter pour s'inscrire</a>
+      {% elif est_inscrit and evenement.est_termine %}
+        <p class="texte-discret">Vous avez participé à cet événement.</p>
+      {% elif est_inscrit %}
+        <p class="texte-succes">Vous êtes inscrit à cet événement.</p>
+        <form method="post" action="{% url 'events:desinscrire' evenement.pk %}">
+          {% csrf_token %}
+          <button type="submit" class="bouton bouton--secondaire bouton--large">Annuler mon inscription</button>
+        </form>
+      {% elif evenement.est_termine %}
+        <p class="texte-discret">Cet événement est terminé.</p>
+      {% elif evenement.est_complet %}
+        <button type="button" class="bouton bouton--large" disabled>Complet</button>
+      {% else %}
+        <form method="post" action="{% url 'events:inscrire' evenement.pk %}">
+          {% csrf_token %}
+          <button type="submit" class="bouton bouton--large">S'inscrire</button>
+        </form>
+      {% endif %}
+    </div>
+
+    {% if peut_modifier %}
+      <div class="detail__gestion">
+        <p class="detail__gestion-titre">Gestion de l'événement</p>
+        <div class="actions">
+          <a href="{% url 'events:modifier' evenement.pk %}" class="bouton bouton--secondaire">Modifier</a>
+          <a href="{% url 'events:supprimer' evenement.pk %}" class="bouton bouton--danger">Supprimer</a>
+        </div>
+      </div>
+    {% endif %}
+  </aside>
+</div>
+{% endblock %}

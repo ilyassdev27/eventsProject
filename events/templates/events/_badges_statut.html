@@ -1,0 +1,4 @@
+{# Badges de statut réutilisés dans les cartes, la fiche détail et le tableau de bord. Variables : evenement, inscrits_ids #}
+<span class="badge {% if evenement.est_termine %}badge--termine{% else %}badge--a-venir{% endif %}">{{ evenement.statut }}</span>
+{% if evenement.pk in inscrits_ids %}<span class="badge badge--inscrit">Inscrit</span>{% endif %}
+{% if evenement.est_complet and not evenement.est_termine %}<span class="badge badge--complet">Complet</span>{% endif %}
