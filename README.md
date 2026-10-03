@@ -2,7 +2,7 @@
 
 Application web Django (frontend et backend) qui centralise, planifie et suit la participation à des activités tech : conférences, ateliers pratiques et certifications.
 
-Mini-projet Django/Python, réalisé par **Mohammed Hamdani** et _(nom du binôme)_.
+Mini-projet Django/Python, réalisé par **Mohammed Hamdani** et Ilyass Boukaya.
 
 ---
 
